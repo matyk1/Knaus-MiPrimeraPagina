@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login as django_login
 from usuarios.forms import CreacionDeUsuario, EditarPerfil
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
+from usuarios.models import DatosExtras
 
 def login(request):
     formulario = AuthenticationForm
@@ -32,13 +33,22 @@ def perfil(request):
     return render(request, 'usuarios/perfil.html')
 
 def editar_perfil(request):
+    
+    user = request.user
+    datos_extra, _ = DatosExtras.objects.get_or_create(user=user)
+    
     if request.method == "POST":
-        formulario = EditarPerfil(request.POST, instance=request.user)
+        formulario = EditarPerfil(request.POST, request.FILES, instance=request.user)
         if formulario.is_valid():
+            avatar = formulario.cleaned_data.get('avatar')
+            if avatar:
+                datos_extra.avatar = avatar
+                
+            datos_extra.save()
             formulario.save()
             return redirect('perfil')
     else:
-        formulario = EditarPerfil(instance=request.user)
+        formulario = EditarPerfil(initial={'avatar':datos_extra.avatar}, instance=request.user)
                         
     return render(request, 'usuarios/editar_perfil.html', {'formulario':formulario})
 

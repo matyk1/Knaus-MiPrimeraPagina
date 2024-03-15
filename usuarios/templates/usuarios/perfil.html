@@ -9,6 +9,9 @@
         <li>Nombre: {{request.user.first_name}}</li>
         <li>Apellido: {{request.user.last_name}}</li>
         <li>Email: {{request.user.email}}</li>
+        {% if request.user.datosextras.avatar %}
+            <li>Avatar: <img src={{request.user.datosextras.avatar.url}} alt="" height="100px"></li>
+        {% endif %}
     </ul>
 <a class = 'btn btn-secondary' href="{% url "editar_perfil" %}">Editar perfil</a>
 <a class = 'btn btn-secondary' href="{% url "cambiar_contrasenia" %}">Cambiar Contrasenia</a>

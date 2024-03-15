@@ -60,3 +60,6 @@ def ver_empleado(request, id_empleado):
     empleado = Empleado.objects.get(id=id_empleado)
     
     return render(request, 'inicio/ver_empleado.html', {'empleado': empleado})
+
+def about_me(request):
+    return render(request, 'inicio/about_me.html', {})
