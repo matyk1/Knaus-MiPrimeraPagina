@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <h1>Eliminar Juego</h1>
+{% endblock header %}
+
+{% block main %}
+    <form action={% url "eliminar_juego" juego.id %} method="POST">
+        {% csrf_token %}
+        <p>Confirma el borrado del Juego {{auto}}</p>
+        <input type="submit" value="Confirmar">
+    </form>
+{% endblock main %}

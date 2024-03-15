@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block h1_header %}
+Juegos
+{% endblock h1_header %}
+
+{% block main %}
+    <a href={% url "agregar_juego" %}>Agregar Juego</a>
+    {% if juegos %}
+    <ul>
+        {% for juego in juegos %}
+            <li>{{juego}} 
+                | <a href={% url "detalle_juego" juego.id %}>Ver</a> 
+                | <a href={% url "eliminar_juego" juego.id %}>Eliminar</a> 
+                | <a href={% url "editar_juego" juego.id %}>Editar</a>
+            </li> 
+        {% endfor %}            
+    <ul>
+    {% else %}
+    <p>No se encontraron juegos cargados</p>
+    {% endif %}
+{% endblock main %}

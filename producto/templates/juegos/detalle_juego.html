@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block h1_header %}
+    Detalle del {{juego}}
+{% endblock h1_header %}
+
+{% block main %}
+    <ul>
+        <li>Nombre: {{juego.nombre}}</li>
+        <li>Descripcion: {{juego.descripcion}}</li>
+        <li>Consola: {{juego.consola}}</li>
+        <li>Version: {{juego.version}}</li>
+        <li>Fecha de Lanzamiento: {{juego.fecha_lanzamiento}}</li>
+        <li>Compania: {{juego.compania}}</li>
+    </ul>
+{% endblock main %}

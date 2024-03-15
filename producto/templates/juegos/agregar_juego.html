@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <h1>Agregar Juego</h1>
+{% endblock header %}
+
+{% block main %}
+    <form action={% url "agregar_juego" %} method="POST">
+        {% csrf_token %}
+        <table>
+            {{form}}
+        </table>      
+        <input type="submit" value="Agregar Juego">
+    </form>
+{% endblock main %}
+    

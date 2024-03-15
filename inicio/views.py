@@ -3,6 +3,7 @@ from inicio.forms import FormularioNuevoEmpleado, FormularioBusquedaEmpleado, Fo
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 def inicio(request):
     return render(request, 'inicio/inicio.html', {})
@@ -15,6 +16,7 @@ def empleados(request):
     
     return render(request, 'inicio/empleados.html', {'empleados':empleado, 'formulario':formulario})
 
+@login_required
 def agregar_empleado(request):
     formulario = FormularioNuevoEmpleado()
     if request.method =='POST':
@@ -30,12 +32,14 @@ def agregar_empleado(request):
     
     return render(request, 'inicio/agregar_empleado.html', {'formulario':formulario})
 
+@login_required
 def eliminar_empleado(request, id_empleado):
     empleado = Empleado.objects.get(id=id_empleado)
     empleado.delete()
     
     return redirect('empleados')
 
+@login_required
 def editar_empleado(request, id_empleado):
     empleado = Empleado.objects.get(id=id_empleado)
     formulario = FormularioEdicionEmpleado(initial={'nombre':empleado.nombre, 'apellido':empleado.apellido, 'edad':empleado.edad, 'anio_de_empleo':empleado.anio_de_empleo})
