@@ -1,11 +1,19 @@
 from inicio.models import Empleado
-from inicio.forms import FormularioNuevoEmpleado
+from inicio.forms import FormularioNuevoEmpleado, FormularioBusquedaEmpleado, FormularioEdicionEmpleado
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 def inicio(request):
-    return render(request, 'inicio.html', {})
+    return render(request, 'inicio/inicio.html', {})
+
+def empleados(request): 
+    formulario = FormularioBusquedaEmpleado(request.GET)
+    if formulario.is_valid():
+        nombre_a_buscar = formulario.cleaned_data.get('nombre')
+        empleado = Empleado.objects.filter(nombre__icontains=nombre_a_buscar) 
+    
+    return render(request, 'inicio/empleados.html', {'empleados':empleado, 'formulario':formulario})
 
 def agregar_empleado(request):
     formulario = FormularioNuevoEmpleado()
@@ -20,8 +28,31 @@ def agregar_empleado(request):
             empleado.save()
         return redirect('agregar_empleado')
     
-    return render(request, 'agregar_empleado.html', {'formulario':formulario})
+    return render(request, 'inicio/agregar_empleado.html', {'formulario':formulario})
 
-def mostrar_trabajadores(request):
-    empleado = Empleado.objects.all()
-    return render(request, 'mostrar_trabajadores.html', {'empleado':empleado})
+def eliminar_empleado(request, id_empleado):
+    empleado = Empleado.objects.get(id=id_empleado)
+    empleado.delete()
+    
+    return redirect('empleados')
+
+def editar_empleado(request, id_empleado):
+    empleado = Empleado.objects.get(id=id_empleado)
+    formulario = FormularioEdicionEmpleado(initial={'nombre':empleado.nombre, 'apellido':empleado.apellido, 'edad':empleado.edad, 'anio_de_empleo':empleado.anio_de_empleo})
+    if request.method =='POST':
+        formulario = FormularioEdicionEmpleado(request.POST)
+        if formulario.is_valid():
+            info_nueva = formulario.cleaned_data
+            empleado.nombre = info_nueva.get('nombre')
+            empleado.apellido = info_nueva.get('apellido')
+            empleado.edad = info_nueva.get('edad')
+            empleado.anio_de_empleo = info_nueva.get('anio_de_empleo')
+            empleado.save()
+            return redirect('empleados')
+    
+    return render(request, 'inicio/editar_empleado.html', {'empleado': empleado, 'formulario':formulario})
+    
+def ver_empleado(request, id_empleado):
+    empleado = Empleado.objects.get(id=id_empleado)
+    
+    return render(request, 'inicio/ver_empleado.html', {'empleado': empleado})

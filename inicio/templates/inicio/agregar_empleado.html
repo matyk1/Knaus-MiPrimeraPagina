@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <h1>Agregar Empleado</h1>
+{% endblock header %}
+
+{% block main %}
+    <form action={% url "agregar_empleado" %} method="POST">
+        {% csrf_token %}
+        <table>
+            {{formulario}}
+        </table>      
+        <input type="submit" value="Agregar Empleado">
+    </form>
+{% endblock main %}
+    
